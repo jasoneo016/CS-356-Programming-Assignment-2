@@ -54,4 +54,8 @@ public abstract class User implements TreeItem{
         return messages;
     }
      
+    public int getTotalUsers() {
+        return totalUsers;
+    }
+    
 }

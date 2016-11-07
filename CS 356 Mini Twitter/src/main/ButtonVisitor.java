@@ -15,7 +15,7 @@ public interface ButtonVisitor {
 
     public void visitMessagesTotal(User user);
     
-    public void visitGroupTotal(UserGroup ug);
+    public void visitGroupTotal(Group group);
     
     public void visitPositivePercentage(User user);
 

@@ -16,11 +16,15 @@ public class StatisticButtonVisitor implements ButtonVisitor {
     private int totalUsers = 0;
     private int totalMessages = 0;
     private int totalGroups = 0;
-    private double positivePercentage;
+    private double positivePercentage = 0.0;
+    private int positiveCount = 0;
+    
+    private String[] positiveWords = {"good", "great", "excellent", "dope", 
+    "fam", "brackin", "dench", "chill", "hella", "lit"};
     
     @Override
     public void visitUserTotal(User user) {
-        setTotalUsers(getTotalUsers() + 1);
+        setTotalUsers(user.getTotalUsers());
     }
 
     @Override
@@ -29,32 +33,36 @@ public class StatisticButtonVisitor implements ButtonVisitor {
     }
 
     @Override
-    public void visitGroupTotal(UserGroup ug) {
-        setTotalGroups(ug);
+    public void visitGroupTotal(Group group) {
+        setTotalGroups(group);
     }
 
     @Override
     public void visitPositivePercentage(User user) {
         List<String> tweets = user.getMessages();
+        
+       for (String tweet: tweets) {
+           for (String word: positiveWords) {
+               if (tweet.toLowerCase().contains(word)) {
+                   positiveCount++;
+               }
+           }
+       }
     }
     
     public void setTotalUsers(int totalUsers) {
         this.totalUsers = totalUsers;
     }
     
-    public int getTotalUsers() {
-        return totalUsers;
-    }
-    
     public void setMessagesTotal(User user) {
         this.totalMessages = user.getMessages().size();
     }
     
-    public void setTotalGroups(UserGroup ug) {
-        this.totalGroups = ug.getTotalGroups();
+    public void setTotalGroups(Group group) {
+        this.totalGroups = group.getTotalGroups();
     }
     
     public double getPositivePercentage() {
-        return positivePercentage;
+        return ((positiveCount / totalMessages) * 100.0);
     }
 }

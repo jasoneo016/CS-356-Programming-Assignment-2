@@ -12,13 +12,13 @@ import java.util.List;
  *
  * @author admin
  */
-public class UserGroup implements TreeItem {
+public class Group implements TreeItem {
     
     private String uniqueID;
     private List<User> users;
     private int totalGroups = 0;
     
-    public UserGroup() {
+    public Group() {
         users = new ArrayList();
         totalGroups++;
     }
@@ -38,6 +38,6 @@ public class UserGroup implements TreeItem {
     }
 
     public int getTotalGroups() {
-        return 1;
+        return totalGroups;
     }
 }
