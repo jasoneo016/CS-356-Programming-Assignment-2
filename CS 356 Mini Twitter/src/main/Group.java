@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultTreeModel;
  *
  * @author admin
  */
-public class Group implements TreeItem {
+public class Group extends TreeItem {
     
     private String uniqueID;
     private List<User> users = new ArrayList();
@@ -30,16 +30,7 @@ public class Group implements TreeItem {
         this.uniqueID = uniqueID;
         totalGroups++;
     }
-
-    @Override
-    public String getID() {
-        return uniqueID;
-    }
-
-    @Override
-    public void setID(String uniqueID) {
-        this.uniqueID = uniqueID;
-    }
+    
 
     public int getTotalGroups() {
         return totalGroups;

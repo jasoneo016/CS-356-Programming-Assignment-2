@@ -5,14 +5,18 @@
  */
 package main;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 /**
  *
  * @author admin
  */
-public interface TreeItem {
+public abstract class TreeItem extends DefaultMutableTreeNode {
     
-    public String getID();
-    
-    public void setID(String uniqueID);
-    
+        private String uniqueID;
+
+        public String getID() {
+        return uniqueID;
+    }
+   
 }

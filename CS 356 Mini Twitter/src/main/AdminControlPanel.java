@@ -5,9 +5,13 @@
  */
 package main;
 
+import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -18,6 +22,9 @@ import javax.swing.tree.DefaultTreeModel;
 public class AdminControlPanel extends javax.swing.JFrame {
     
     protected static AdminControlPanel instance;
+    
+    ArrayList<String> uniqueIDs = new ArrayList();
+    ArrayList<String> uniqueGroupIDs = new ArrayList();
     
     Group group = new Group();
     DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
@@ -67,6 +74,12 @@ public class AdminControlPanel extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTreeView.setModel(model);
+        jTreeView.addTreeSelectionListener(new TreeSelectionListener() {
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                System.out.println("You selected " + node);
+            }
+        });
         jScrollPane1.setViewportView(jTreeView);
 
         groupIDTextArea.setColumns(20);
@@ -193,23 +206,37 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
-        User user = new User(userIDTextArea.getText());
-        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText());
-        root.add(userNode);
+        if (!uniqueIDs.contains(userIDTextArea.getText())) {
+            User user = new User(userIDTextArea.getText());
+            uniqueIDs.add(userIDTextArea.getText());
+            DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText());
+            root.add(userNode);
+        } else {
+            JOptionPane.showMessageDialog(null, "This user already exists.");
+            System.out.println(System.currentTimeMillis());
+        }
         model.reload(root);
         userIDTextArea.setText("");
     }//GEN-LAST:event_addUserButtonActionPerformed
 
     private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
-        Group groups = new Group(groupIDTextArea.getText());
-        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
-        root.add(groupNode);
+        if (!uniqueGroupIDs.contains(groupIDTextArea.getText())) {
+            Group groups = new Group(groupIDTextArea.getText());
+            uniqueGroupIDs.add(groupIDTextArea.getText());
+            DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
+            root.add(groupNode);
+        } else {
+            JOptionPane.showMessageDialog(null, "This group already exists.");
+        }
         model.reload(root);
         groupIDTextArea.setText("");
     }//GEN-LAST:event_addGroupButtonActionPerformed
 
     private void openUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewButtonActionPerformed
-        // TODO add your handling code here:
+        UserView userView = new UserView();
+        userView.setVisible(true);
+        userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }//GEN-LAST:event_openUserViewButtonActionPerformed
 
     private void showUserTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalButtonActionPerformed

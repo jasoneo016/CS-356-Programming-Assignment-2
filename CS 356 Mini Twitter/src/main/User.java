@@ -6,18 +6,24 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  *
  * @author admin
  */
-public class User implements TreeItem{
+public class User extends TreeItem implements Subject, Observer {
     
      private String uniqueID;
      private List<String> followers;
      private List<String> following;
      private List<String> messages;
+     private List<String> newsFeed;
+     private List<Observer> observers = new ArrayList<Observer>();
+     private final HashMap<List<String>,List<String>> liveUpdate = new HashMap();
+     
+
      private int totalUsers = 0;
      private int positiveCount = 0;
      private String[] positiveWords = {"good", "great", "excellent", "dope", "fam", 
@@ -30,19 +36,9 @@ public class User implements TreeItem{
          messages  = new ArrayList();
          totalUsers++;
      }
-     
-     @Override
-     public String getID() {
-         return uniqueID;
-     } 
-     
-     @Override
-     public void setID(String uniqueID) {
-         this.uniqueID = uniqueID;
-     }
 
-    public void follow() {
-        
+    public void follow(String uniqueID) {
+        following.add(uniqueID);
     }
     
     public void tweet(String message) {
@@ -64,5 +60,33 @@ public class User implements TreeItem{
     
     public int getPositiveCount() {
         return positiveCount;
+    }
+
+    @Override
+    public void attach(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void detach(Observer observer) {
+	observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer ob : observers) {
+            ob.update(this);
+	}
+    }
+    
+    public List<String> getNewsFeed() {
+        return newsFeed;
+    }
+
+    @Override
+    public void update(Subject subject) {
+        if (subject instanceof User) {
+//            liveUpdate.put(following, )
+        }
     }
 }

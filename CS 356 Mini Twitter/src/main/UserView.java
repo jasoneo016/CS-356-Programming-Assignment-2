@@ -5,6 +5,8 @@
  */
 package main;
 
+import javax.swing.JScrollPane;
+
 /**
  *
  * @author admin
@@ -27,7 +29,7 @@ public class UserView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane(userViewIDTextArea, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         userViewIDTextArea = new javax.swing.JTextArea();
         followButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -60,7 +62,9 @@ public class UserView extends javax.swing.JFrame {
         jScrollPane2.setViewportView(followingList);
 
         tweetTextArea.setColumns(20);
+        tweetTextArea.setLineWrap(true);
         tweetTextArea.setRows(5);
+        tweetTextArea.setWrapStyleWord(true);
         jScrollPane3.setViewportView(tweetTextArea);
 
         tweetButton.setText("Post Tweet");
@@ -113,43 +117,11 @@ public class UserView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void followButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followButtonActionPerformed
-        // TODO add your handling code here:
+        if (userViewIDTextArea.getText() == "") {
+            
+        }
     }//GEN-LAST:event_followButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new UserView().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton followButton;
