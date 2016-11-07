@@ -6,6 +6,10 @@
 package main;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -14,6 +18,10 @@ import javax.swing.JOptionPane;
 public class AdminControlPanel extends javax.swing.JFrame {
     
     protected static AdminControlPanel instance;
+    
+    Group group = new Group();
+    DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
+    DefaultTreeModel model = new DefaultTreeModel(root);
 
     /**
      * Creates new form AdminControlPanel
@@ -44,9 +52,9 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTreeView = new javax.swing.JTree();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane(groupIDTextArea, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         groupIDTextArea = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane(userIDTextArea, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         userIDTextArea = new javax.swing.JTextArea();
         addUserButton = new javax.swing.JButton();
         addGroupButton = new javax.swing.JButton();
@@ -58,19 +66,18 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTreeView.setModel(model);
         jScrollPane1.setViewportView(jTreeView);
 
         groupIDTextArea.setColumns(20);
         groupIDTextArea.setLineWrap(true);
         groupIDTextArea.setRows(5);
-        groupIDTextArea.setText("Group ID");
         groupIDTextArea.setWrapStyleWord(true);
         jScrollPane2.setViewportView(groupIDTextArea);
 
         userIDTextArea.setColumns(20);
         userIDTextArea.setLineWrap(true);
         userIDTextArea.setRows(5);
-        userIDTextArea.setText("User ID");
         jScrollPane3.setViewportView(userIDTextArea);
 
         addUserButton.setText("Add User");
@@ -186,11 +193,19 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
-        // TODO add your handling code here:
+        User user = new User(userIDTextArea.getText());
+        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText());
+        root.add(userNode);
+        model.reload(root);
+        userIDTextArea.setText("");
     }//GEN-LAST:event_addUserButtonActionPerformed
 
     private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
-        // TODO add your handling code here:
+        Group groups = new Group(groupIDTextArea.getText());
+        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
+        root.add(groupNode);
+        model.reload(root);
+        groupIDTextArea.setText("");
     }//GEN-LAST:event_addGroupButtonActionPerformed
 
     private void openUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewButtonActionPerformed
@@ -213,40 +228,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_showPositivePercentageButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AdminControlPanel().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGroupButton;
@@ -263,4 +244,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotalButton;
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
+
+
 }

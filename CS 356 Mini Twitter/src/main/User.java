@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author admin
  */
-public abstract class User implements TreeItem{
+public class User implements TreeItem{
     
      private String uniqueID;
      private List<String> followers;
@@ -41,10 +41,6 @@ public abstract class User implements TreeItem{
          this.uniqueID = uniqueID;
      }
 
-    @Override
-    public void add() {
-    }
-    
     public void follow() {
         
     }

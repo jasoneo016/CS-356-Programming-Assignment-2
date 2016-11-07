@@ -15,5 +15,4 @@ public interface TreeItem {
     
     public void setID(String uniqueID);
     
-    public void add();
 }
