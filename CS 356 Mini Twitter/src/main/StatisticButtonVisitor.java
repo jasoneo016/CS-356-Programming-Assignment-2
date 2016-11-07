@@ -5,6 +5,7 @@
  */
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +19,6 @@ public class StatisticButtonVisitor implements ButtonVisitor {
     private int totalGroups = 0;
     private double positivePercentage = 0.0;
     private int positiveCount = 0;
-    
-    private String[] positiveWords = {"good", "great", "excellent", "dope", 
-    "fam", "brackin", "dench", "chill", "hella", "lit"};
     
     @Override
     public void visitUserTotal(User user) {
@@ -39,15 +37,8 @@ public class StatisticButtonVisitor implements ButtonVisitor {
 
     @Override
     public void visitPositivePercentage(User user) {
+        List<User> users = new ArrayList();
         List<String> tweets = user.getMessages();
-        
-       for (String tweet: tweets) {
-           for (String word: positiveWords) {
-               if (tweet.toLowerCase().contains(word)) {
-                   positiveCount++;
-               }
-           }
-       }
     }
     
     public void setTotalUsers(int totalUsers) {
@@ -64,5 +55,9 @@ public class StatisticButtonVisitor implements ButtonVisitor {
     
     public double getPositivePercentage() {
         return ((positiveCount / totalMessages) * 100.0);
+    }
+    
+    public void setPositivePercentage(double percentage) {
+        this.positivePercentage = 0.0;
     }
 }

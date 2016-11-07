@@ -19,6 +19,9 @@ public abstract class User implements TreeItem{
      private List<String> following;
      private List<String> messages;
      private int totalUsers = 0;
+     private int positiveCount = 0;
+     private String[] positiveWords = {"good", "great", "excellent", "dope", "fam", 
+                                      "brackin", "dench", "chill", "hella", "lit"};
      
      public User(String uniqueID) {
          this.uniqueID = uniqueID;
@@ -48,6 +51,11 @@ public abstract class User implements TreeItem{
     
     public void tweet(String message) {
         messages.add(message);
+        for (String word: positiveWords) {
+            if (message.toLowerCase().contains(word)) {
+                   positiveCount++;
+               }
+        }
     }
     
     public List<String> getMessages() {
@@ -58,4 +66,7 @@ public abstract class User implements TreeItem{
         return totalUsers;
     }
     
+    public int getPositiveCount() {
+        return positiveCount;
+    }
 }

@@ -9,9 +9,7 @@ package main;
  *
  * @author admin
  */
-public class Driver {
+public interface Observer {
     
-    public static void main(String[] args) {
-        
-    }
+    public void update(Subject subject);
 }

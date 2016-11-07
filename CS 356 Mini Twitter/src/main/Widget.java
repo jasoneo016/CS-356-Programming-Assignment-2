@@ -9,9 +9,8 @@ package main;
  *
  * @author admin
  */
-public class Driver {
+public interface Widget {
     
-    public static void main(String[] args) {
-        
-    }
+    public void openWindow();
+    
 }
