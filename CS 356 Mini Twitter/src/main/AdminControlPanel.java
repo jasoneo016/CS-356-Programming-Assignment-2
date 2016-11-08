@@ -25,10 +25,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     
     ArrayList<String> uniqueIDs = new ArrayList();
     ArrayList<String> uniqueGroupIDs = new ArrayList();
-    
-    Group group = new Group();
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
-    DefaultTreeModel model = new DefaultTreeModel(root);
+   
 
     /**
      * Creates new form AdminControlPanel
@@ -73,7 +70,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTreeView.setModel(model);
+        jTreeView.setModel(TreeItem.getInstance().getTreeModel1());
         jTreeView.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
@@ -210,12 +207,12 @@ public class AdminControlPanel extends javax.swing.JFrame {
             User user = new User(userIDTextArea.getText());
             uniqueIDs.add(userIDTextArea.getText());
             DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText());
-            root.add(userNode);
+//            root.add(userNode);
         } else {
             JOptionPane.showMessageDialog(null, "This user already exists.");
             System.out.println(System.currentTimeMillis());
         }
-        model.reload(root);
+//        model.reload(root);
         userIDTextArea.setText("");
     }//GEN-LAST:event_addUserButtonActionPerformed
 
@@ -224,11 +221,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
             Group groups = new Group(groupIDTextArea.getText());
             uniqueGroupIDs.add(groupIDTextArea.getText());
             DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
-            root.add(groupNode);
+//            root.add(groupNode);
         } else {
             JOptionPane.showMessageDialog(null, "This group already exists.");
         }
-        model.reload(root);
+//        model.reload(root);
         groupIDTextArea.setText("");
     }//GEN-LAST:event_addGroupButtonActionPerformed
 

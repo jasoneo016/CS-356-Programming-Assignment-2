@@ -7,8 +7,6 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -18,25 +16,19 @@ public class Group extends TreeItem {
     
     private String uniqueID;
     private List<User> users = new ArrayList();
-    private static DefaultMutableTreeNode root;
     private int totalGroups = 0;
-    
-    public Group() {
-        root = new DefaultMutableTreeNode("Root");
-        totalGroups++;
-    }
+    private Group root = new Group("Root");
     
     public Group(String uniqueID) {
         this.uniqueID = uniqueID;
         totalGroups++;
     }
-    
 
     public int getTotalGroups() {
         return totalGroups;
     }
     
-    public DefaultMutableTreeNode getRoot() {
+    public Group getRoot() {
         return root;
     }
 }
