@@ -61,9 +61,9 @@ public class TreeItem extends DefaultMutableTreeNode {
         return new DefaultTreeModel(root);
     }
         
-    public void configureTree(DefaultMutableTreeNode parentItem, List<TreeItem> items) {
+    public void configureTree(TreeItem parentItem, List<TreeItem> items) {
         for (TreeItem treeItem: items) {
-            DefaultMutableTreeNode item = new DefaultMutableTreeNode(treeItem.getID());
+            TreeItem item = new TreeItem(treeItem.getID());
             parentItem.add(item);
             
             if (treeItem instanceof Group) {
