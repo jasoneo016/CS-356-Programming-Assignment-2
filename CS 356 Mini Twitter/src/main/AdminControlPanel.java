@@ -70,7 +70,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTreeView.setModel(TreeItem.getInstance().getTreeModel1());
+        jTreeView.setModel(TreeItem.getInstance().getTreeModel());
         jTreeView.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();

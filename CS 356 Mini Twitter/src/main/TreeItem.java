@@ -19,27 +19,22 @@ public class TreeItem extends DefaultMutableTreeNode {
     private List<TreeItem> treeItems;
     protected static TreeItem instance;
     private Group root = new Group("Root");
-//    boolean allowsChildren;
-//    protected Object userObject;
-//
-//    public TreeItem() {
-//        this(null, true);
-//    }
-//    
-//    public TreeItem(Object userObject)
-//    {
-//      this(userObject, true);
-//    }
-//    
-//    public TreeItem(Object userObject, boolean allowsChildren)
-//    {
-//      this.userObject = userObject;
-//      this.allowsChildren = allowsChildren;
-//    }
+    boolean allowsChildren;
+    protected Object userObject;
 
-    public DefaultTreeModel getTreeModel1() {
-        
-        return new DefaultTreeModel(root);
+    public TreeItem() {
+        this(null, true);
+    }
+    
+    public TreeItem(Object userObject)
+    {
+      this(userObject, true);
+    }
+    
+    public TreeItem(Object userObject, boolean allowsChildren)
+    {
+      this.userObject = userObject;
+      this.allowsChildren = allowsChildren;
     }
 
     public static TreeItem getInstance() {
