@@ -18,7 +18,6 @@ public class TreeItem extends DefaultMutableTreeNode {
     private String uniqueID;
     private List<TreeItem> treeItems;
     protected static TreeItem instance;
-    private Group root = new Group("Root");
     boolean allowsChildren;
     protected Object userObject;
 
@@ -52,26 +51,7 @@ public class TreeItem extends DefaultMutableTreeNode {
         return uniqueID;
     }
     
-    public DefaultTreeModel getTreeModel() {
-        return getTree(root);
-    }
-        
-    public DefaultTreeModel getTree(Group group) {
-        configureTree(root, group.getTreeItems());
-        return new DefaultTreeModel(root);
-    }
-        
-    public void configureTree(TreeItem parentItem, List<TreeItem> items) {
-        for (TreeItem treeItem: items) {
-            TreeItem item = new TreeItem(treeItem.getID());
-            parentItem.add(item);
-            
-            if (treeItem instanceof Group) {
-                configureTree(item, treeItem.getTreeItems());
-            }
-        }
-    }
-    
+
     public List<TreeItem> getTreeItems() {
         return treeItems;
     }
