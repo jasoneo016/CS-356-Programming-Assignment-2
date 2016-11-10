@@ -11,47 +11,12 @@ import java.util.List;
  *
  * @author admin
  */
-public class TreeItem  {
-    
-    private String uniqueID;
-    private List<TreeItem> treeItems;
-    protected static TreeItem instance;
-    boolean allowsChildren;
-    protected Object userObject;
-
-    public TreeItem() {
-        this(null, true);
-    }
-    
-    public TreeItem(Object userObject)
-    {
-      this(userObject, true);
-    }
-    
-    public TreeItem(Object userObject, boolean allowsChildren)
-    {
-      this.userObject = userObject;
-      this.allowsChildren = allowsChildren;
-    }
-
-    public static TreeItem getInstance() {
-        if (instance == null) {
-            synchronized(TreeItem.class) {
-                if (instance == null) {
-                    instance = new TreeItem();
-                }
-            }
-        }
-        return instance;
-    }
+public interface TreeItem  { 
         
-    public String getID() {
-        return uniqueID;
-    }
+    public String getID();
     
-
-    public List<TreeItem> getTreeItems() {
-        return treeItems;
-    }
-   
+    public boolean isSomeProperty();
+    
+    @Override
+    public String toString();
 }

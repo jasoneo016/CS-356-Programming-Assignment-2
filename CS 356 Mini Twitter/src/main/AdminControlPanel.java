@@ -5,14 +5,18 @@
  */
 package main;
 
+import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
 /**
@@ -20,26 +24,35 @@ import javax.swing.tree.DefaultTreeModel;
  * @author admin
  */
 public class AdminControlPanel extends javax.swing.JFrame {
-    
+
     protected static AdminControlPanel instance;
-    
-    ArrayList<String> uniqueIDs = new ArrayList();
-    ArrayList<String> uniqueGroupIDs = new ArrayList();
-    
+
+    ArrayList<User> users;
+    ArrayList<Group> groups;
+
+    ArrayList<String> uniqueUserIDs;
+    ArrayList<String> uniqueGroupIDs;
+
     Group group = new Group();
     DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
-    DefaultTreeModel model = new DefaultTreeModel(root);   
+    DefaultTreeModel model = new DefaultTreeModel(root);
 
     /**
      * Creates new form AdminControlPanel
      */
     public AdminControlPanel() {
+        uniqueUserIDs = new ArrayList();
+        uniqueGroupIDs = new ArrayList();
+        users = new ArrayList();
+        groups = new ArrayList();
+        uniqueGroupIDs.add("Root");
+        groups.add(new Group("Root"));
         initComponents();
     }
-    
+
     public static AdminControlPanel getInstance() {
         if (instance == null) {
-            synchronized(AdminControlPanel.class) {
+            synchronized (AdminControlPanel.class) {
                 if (instance == null) {
                     instance = new AdminControlPanel();
                 }
@@ -74,6 +87,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTreeView.setModel(model);
+        jTreeView.setCellRenderer(new MyTreeCellRenderer());
         jScrollPane1.setViewportView(jTreeView);
 
         groupIDTextArea.setColumns(20);
@@ -203,11 +217,35 @@ public class AdminControlPanel extends javax.swing.JFrame {
         if (userIDTextArea.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please type a user to add.");
         } else {
-            if (!uniqueIDs.contains(userIDTextArea.getText())) {
-                User user = new User(userIDTextArea.getText());
-                uniqueIDs.add(userIDTextArea.getText());
-                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText(), false);
-                root.add(userNode);
+            if (!uniqueUserIDs.contains(userIDTextArea.getText())) {
+                if (jTreeView.getSelectionPath() == null) {
+                    User user = new User(userIDTextArea.getText());
+                    users.add(user);
+                    uniqueUserIDs.add(userIDTextArea.getText());
+                    DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
+                    root.add(userNode);
+                } else {
+                    DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
+                    if (selectedElement == root) {
+                        User user = new User(userIDTextArea.getText());
+                        users.add(user);
+                        uniqueUserIDs.add(userIDTextArea.getText());
+                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
+                        root.add(userNode);
+                    } else if (selectedElement.getUserObject() instanceof Group) {
+                        User user = new User(userIDTextArea.getText());
+                        users.add(user);
+                        uniqueUserIDs.add(userIDTextArea.getText());
+                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
+                        selectedElement.add(userNode);
+                    } else if (selectedElement.getUserObject() instanceof User) {
+                        User user = new User(userIDTextArea.getText());
+                        users.add(user);
+                        uniqueUserIDs.add(userIDTextArea.getText());
+                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
+                        selectedElement.add(userNode);
+                    }              
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "This user already exists.");
             }
@@ -221,32 +259,28 @@ public class AdminControlPanel extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please type a group to add.");
         } else {
             if (!uniqueGroupIDs.contains(groupIDTextArea.getText())) {
-                                
                 if (jTreeView.getSelectionPath() == null) {
                     group = new Group(groupIDTextArea.getText());
+                    groups.add(group);
                     uniqueGroupIDs.add(groupIDTextArea.getText());
-                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
+                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                     root.add(groupNode);
                 } else {
-                    jTreeView.addTreeSelectionListener(new TreeSelectionListener() {
-                        public void valueChanged(TreeSelectionEvent e) {
-                            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-                            if (node.getAllowsChildren() == true) {
-                                if (node.getParent() == root || node == root) {
-                                    group = new Group(groupIDTextArea.getText());
-                                    uniqueGroupIDs.add(groupIDTextArea.getText());
-                                    System.out.println("added: " + groupIDTextArea.getText());
-                                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
-                                    node.add(groupNode);
-                                }
-                            }
-                        }
-                    });
+                    DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
+                    if (selectedElement == root) {
+                        group = new Group(groupIDTextArea.getText());
+                        groups.add(group);
+                        uniqueGroupIDs.add(groupIDTextArea.getText());
+                        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
+                        root.add(groupNode);
+                    } else if (uniqueGroupIDs.contains(selectedElement.getUserObject().toString())) {
+                        group = new Group(groupIDTextArea.getText());
+                        groups.add(group);
+                        uniqueGroupIDs.add(groupIDTextArea.getText());
+                        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
+                        selectedElement.add(groupNode);
+                    }
                 }
-//                Group groups = new Group(groupIDTextArea.getText());
-//                uniqueGroupIDs.add(groupIDTextArea.getText());
-//                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
-//                root.add(groupNode);
             } else {
                 JOptionPane.showMessageDialog(null, "This group already exists.");
             }
@@ -278,7 +312,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_showPositivePercentageButtonActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGroupButton;
@@ -296,4 +329,32 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
 
+    
+    private static class MyTreeCellRenderer extends DefaultTreeCellRenderer {
+
+        @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+            // decide what icons you want by examining the node
+            if (value instanceof DefaultMutableTreeNode) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+                if (node.getUserObject().toString() == "Root") {
+                    // your root node, since you just put a String as a user obj                    
+                    setIcon(UIManager.getIcon("FileView.computerIcon"));
+                } else if (node.getUserObject() instanceof Group) {
+                    // decide based on some property of your Contact obj
+                    Group groupObject = (Group) node.getUserObject();
+                    if (groupObject.isSomeProperty()) {
+                        setIcon(UIManager.getIcon("FileChooser.homeFolderIcon"));
+                    } else {
+                        setIcon(UIManager.getIcon("FileChooser.hardDriveIcon"));
+                    }
+                } 
+            }
+
+            return this;
+        }
+
+    }
 }

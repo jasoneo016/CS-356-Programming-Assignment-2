@@ -13,20 +13,27 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author admin
  */
-public class Group extends TreeItem {
-    
+public class Group implements TreeItem {
+
     private String uniqueID;
+    private boolean someProperty;
     private List<User> users = new ArrayList();
     private static DefaultMutableTreeNode root;
-    
+
     private int totalGroups = 0;
-    
+
     public Group() {
-         root = new DefaultMutableTreeNode("Root");
-         totalGroups++;
+        root = new DefaultMutableTreeNode("Root");
+        totalGroups++;
     }
-    
+
     public Group(String uniqueID) {
+        this(uniqueID, true);
+        totalGroups++;
+    }
+
+    public Group(String uniqueID, boolean property) {
+        this.someProperty = property;
         this.uniqueID = uniqueID;
         totalGroups++;
     }
@@ -34,8 +41,23 @@ public class Group extends TreeItem {
     public int getTotalGroups() {
         return totalGroups;
     }
-    
+
     public DefaultMutableTreeNode getRoot() {
-         return root;
-     }
+        return root;
+    }
+
+    @Override
+    public String getID() {
+        return uniqueID;
+    }
+
+    @Override
+    public boolean isSomeProperty() {
+        return someProperty;
+    }
+    
+    @Override
+    public String toString() {
+        return uniqueID;
+    }
 }

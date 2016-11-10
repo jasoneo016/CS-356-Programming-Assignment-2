@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author admin
  */
-public class User extends TreeItem implements Subject, Observer {
+public class User implements TreeItem, Subject, Observer {
     
      private String uniqueID;
      private List<String> followers;
@@ -22,6 +22,7 @@ public class User extends TreeItem implements Subject, Observer {
      private List<String> newsFeed;
      private List<Observer> observers = new ArrayList<Observer>();
      private final HashMap<List<String>,List<String>> liveUpdate = new HashMap();
+     private boolean someProperty;
      
 
      private int totalUsers = 0;
@@ -30,13 +31,22 @@ public class User extends TreeItem implements Subject, Observer {
                                       "brackin", "dench", "chill", "hella", "lit"};
      
      public User(String uniqueID) {
-         this.uniqueID = uniqueID;
+         this(uniqueID,false);
          followers = new ArrayList();
          following = new ArrayList();
          messages  = new ArrayList();
          totalUsers++;
      }
 
+     public User(String uniqueID, boolean property) {
+         this.uniqueID = uniqueID;
+         this.someProperty = property;
+         followers = new ArrayList();
+         following = new ArrayList();
+         messages  = new ArrayList();
+         totalUsers++;
+     }
+     
     public void follow(String uniqueID) {
         following.add(uniqueID);
     }
@@ -88,5 +98,20 @@ public class User extends TreeItem implements Subject, Observer {
         if (subject instanceof User) {
 //            liveUpdate.put(following, )
         }
+    }
+
+    @Override
+    public String getID() {
+        return uniqueID;
+    }
+
+    @Override
+    public boolean isSomeProperty() {
+        return someProperty;
+    }
+    
+    @Override
+    public String toString() {
+        return uniqueID;
     }
 }

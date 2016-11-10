@@ -109,7 +109,7 @@
       <SubComponents>
         <Component class="javax.swing.JTree" name="jTreeView">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTreeView.setModel(model);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTreeView.setModel(model);&#xa;jTreeView.setCellRenderer(new MyTreeCellRenderer());"/>
           </AuxValues>
         </Component>
       </SubComponents>
