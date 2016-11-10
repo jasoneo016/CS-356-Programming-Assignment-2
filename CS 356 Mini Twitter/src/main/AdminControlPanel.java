@@ -247,7 +247,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
                         parentNode.add(userNode);
-//                      selectedElement.add(userNode);
                     }
                 }
             } else {
@@ -255,6 +254,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
             }
         }
         model.reload(root);
+        expandAllNodes(jTreeView, 0, jTreeView.getRowCount());
         userIDTextArea.setText("");
     }//GEN-LAST:event_addUserButtonActionPerformed
 
@@ -290,14 +290,23 @@ public class AdminControlPanel extends javax.swing.JFrame {
             }
         }
         model.reload(root);
+        expandAllNodes(jTreeView, 0, jTreeView.getRowCount());
         groupIDTextArea.setText("");
     }//GEN-LAST:event_addGroupButtonActionPerformed
 
     private void openUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewButtonActionPerformed
-        UserView userView = new UserView();
-        userView.setVisible(true);
-        userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        if (jTreeView.getSelectionPath() == null) {
+            JOptionPane.showMessageDialog(null, "Please select a user to view.");
+        } else {
+            DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
+            if (selectedElement.getUserObject() instanceof Group) {
+                JOptionPane.showMessageDialog(null, "Please select a user to view.");
+            } else if (selectedElement.getUserObject() instanceof User) {
+                UserView userView = new UserView();
+                userView.setVisible(true);
+                userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+        }
     }//GEN-LAST:event_openUserViewButtonActionPerformed
 
     private void showUserTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalButtonActionPerformed
@@ -332,6 +341,16 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotalButton;
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
+
+    private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {
+        for (int i = startingIndex; i < rowCount; ++i) {
+            tree.expandRow(i);
+        }
+
+        if (tree.getRowCount() != rowCount) {
+            expandAllNodes(tree, rowCount, tree.getRowCount());
+        }
+    }
 
     private static class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 
