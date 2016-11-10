@@ -32,6 +32,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     ArrayList<String> uniqueUserIDs;
     ArrayList<String> uniqueGroupIDs;
+    
+    private String selectedUser;
 
     Group group = new Group();
     DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
@@ -215,7 +217,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
         if (userIDTextArea.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please type a user to add.");
+            JOptionPane.showMessageDialog(null, "Please type a user to add.", "Add User Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (!uniqueUserIDs.contains(userIDTextArea.getText())) {
                 if (jTreeView.getSelectionPath() == null) {
@@ -250,7 +252,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "This user already exists.");
+                JOptionPane.showMessageDialog(null, "This user already exists.", "Add User Error", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         model.reload(root);
@@ -260,7 +262,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
         if (groupIDTextArea.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please type a group to add.");
+            JOptionPane.showMessageDialog(null, "Please type a group to add.", "Add Group Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (!uniqueGroupIDs.contains(groupIDTextArea.getText())) {
                 if (jTreeView.getSelectionPath() == null) {
@@ -286,7 +288,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "This group already exists.");
+                JOptionPane.showMessageDialog(null, "This group already exists.", "Add Group Error", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         model.reload(root);
@@ -296,13 +298,14 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     private void openUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewButtonActionPerformed
         if (jTreeView.getSelectionPath() == null) {
-            JOptionPane.showMessageDialog(null, "Please select a user to view.");
+            JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
             DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
-            if (selectedElement.getUserObject() instanceof Group) {
-                JOptionPane.showMessageDialog(null, "Please select a user to view.");
+            if (selectedElement.getUserObject() instanceof Group || selectedElement.getUserObject().toString().equals("Root")) {
+                JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
             } else if (selectedElement.getUserObject() instanceof User) {
-                UserView userView = new UserView();
+                selectedUser = selectedElement.getUserObject().toString();
+                UserView userView = new UserView(selectedUser);
                 userView.setVisible(true);
                 userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
@@ -310,7 +313,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_openUserViewButtonActionPerformed
 
     private void showUserTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalButtonActionPerformed
-        JOptionPane.showMessageDialog(null, "Show User Total");
+        JOptionPane.showMessageDialog(null, "Show User Total", "Show User Error", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_showUserTotalButtonActionPerformed
 
     private void showGroupTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupTotalButtonActionPerformed
@@ -341,7 +344,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotalButton;
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
-
+    
     private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {
         for (int i = startingIndex; i < rowCount; ++i) {
             tree.expandRow(i);

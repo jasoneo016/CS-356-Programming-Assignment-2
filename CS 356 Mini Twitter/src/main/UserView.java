@@ -6,6 +6,10 @@
 package main;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
@@ -13,10 +17,14 @@ import javax.swing.JScrollPane;
  */
 public class UserView extends javax.swing.JFrame {
 
+    private String user;
+
     /**
      * Creates new form UserView
+     * @param user
      */
-    public UserView() {
+    public UserView(String user) {
+        this.user = user;
         initComponents();
     }
 
@@ -46,6 +54,8 @@ public class UserView extends javax.swing.JFrame {
         userViewIDTextArea.setLineWrap(true);
         userViewIDTextArea.setRows(5);
         jScrollPane1.setViewportView(userViewIDTextArea);
+        userViewIDTextArea.setEditable(false);
+        userViewIDTextArea.setText(user);
 
         followButton.setText("Follow User");
         followButton.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +128,7 @@ public class UserView extends javax.swing.JFrame {
 
     private void followButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followButtonActionPerformed
         if (userViewIDTextArea.getText() == "") {
-            
+
         }
     }//GEN-LAST:event_followButtonActionPerformed
 
