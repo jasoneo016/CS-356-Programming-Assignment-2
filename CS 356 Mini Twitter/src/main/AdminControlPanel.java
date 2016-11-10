@@ -307,7 +307,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
             } else if (selectedElement.getUserObject() instanceof User) {
                 selectedUser = selectedElement.getUserObject().toString();
-                UserView userView = new UserView(selectedUser);
+                User user = new User(selectedUser);
+                UserView userView = new UserView(selectedUser, user);
                 userView.setVisible(true);
                 userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }

@@ -19,7 +19,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class UserView extends javax.swing.JFrame {
 
-    private String user;
+    private String username;
+    private User user;
 
     AdminControlPanel acp = new AdminControlPanel();
     private ArrayList<String> userIDs;
@@ -29,10 +30,11 @@ public class UserView extends javax.swing.JFrame {
      *
      * @param user
      */
-    public UserView(String user) {
+    public UserView(String username, User user) {
+        this.username = username;
         this.user = user;
         userIDs = acp.getUniqueIDs();
-        this.setTitle(user + "'s User View");
+        this.setTitle(username + "'s User View");
         initComponents();
     }
 
@@ -144,12 +146,19 @@ public class UserView extends javax.swing.JFrame {
         }
         if (!userIDs.contains(userViewIDTextArea.getText())) {
             JOptionPane.showMessageDialog(null, "This user does not exist.", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            user.attach(user);
+            user.notifyObservers();
         }
+        
+        
         userViewIDTextArea.setText("");
     }//GEN-LAST:event_followButtonActionPerformed
 
     private void tweetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tweetButtonActionPerformed
-        // TODO add your handling code here:
+        user.tweet(tweetTextArea.getText());
+        user.notifyObservers();
+        tweetTextArea.setText("");
     }//GEN-LAST:event_tweetButtonActionPerformed
 
 

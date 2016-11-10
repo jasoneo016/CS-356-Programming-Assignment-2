@@ -96,7 +96,9 @@ public class User implements TreeItem, Subject, Observer {
     @Override
     public void update(Subject subject) {
         if (subject instanceof User) {
-//            liveUpdate.put(following, )
+//            subject.following
+//            subject.followers
+//            subject.newsfeed
         }
     }
 
