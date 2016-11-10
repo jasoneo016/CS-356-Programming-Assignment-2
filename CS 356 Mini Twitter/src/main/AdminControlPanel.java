@@ -220,31 +220,35 @@ public class AdminControlPanel extends javax.swing.JFrame {
             if (!uniqueUserIDs.contains(userIDTextArea.getText())) {
                 if (jTreeView.getSelectionPath() == null) {
                     User user = new User(userIDTextArea.getText());
+                    DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                     users.add(user);
                     uniqueUserIDs.add(userIDTextArea.getText());
-                    DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
                     root.add(userNode);
                 } else {
                     DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
                     if (selectedElement == root) {
                         User user = new User(userIDTextArea.getText());
+                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
-                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
                         root.add(userNode);
                     } else if (selectedElement.getUserObject() instanceof Group) {
                         User user = new User(userIDTextArea.getText());
+                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
-                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
                         selectedElement.add(userNode);
+
+                        //Still allowing to add users under users..
                     } else if (selectedElement.getUserObject() instanceof User) {
                         User user = new User(userIDTextArea.getText());
+                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
+                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) selectedElement.getParent();
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
-                        DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
-                        selectedElement.add(userNode);
-                    }              
+                        parentNode.add(userNode);
+//                      selectedElement.add(userNode);
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "This user already exists.");
@@ -261,23 +265,23 @@ public class AdminControlPanel extends javax.swing.JFrame {
             if (!uniqueGroupIDs.contains(groupIDTextArea.getText())) {
                 if (jTreeView.getSelectionPath() == null) {
                     group = new Group(groupIDTextArea.getText());
+                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                     groups.add(group);
                     uniqueGroupIDs.add(groupIDTextArea.getText());
-                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                     root.add(groupNode);
                 } else {
                     DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
                     if (selectedElement == root) {
                         group = new Group(groupIDTextArea.getText());
+                        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                         groups.add(group);
                         uniqueGroupIDs.add(groupIDTextArea.getText());
-                        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                         root.add(groupNode);
                     } else if (uniqueGroupIDs.contains(selectedElement.getUserObject().toString())) {
                         group = new Group(groupIDTextArea.getText());
+                        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                         groups.add(group);
                         uniqueGroupIDs.add(groupIDTextArea.getText());
-                        DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                         selectedElement.add(groupNode);
                     }
                 }
@@ -329,7 +333,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
 
-    
     private static class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 
         @Override
@@ -350,7 +353,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     } else {
                         setIcon(UIManager.getIcon("FileChooser.hardDriveIcon"));
                     }
-                } 
+                }
             }
 
             return this;
