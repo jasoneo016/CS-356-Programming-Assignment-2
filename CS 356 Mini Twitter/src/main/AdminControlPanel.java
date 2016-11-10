@@ -27,17 +27,17 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     protected static AdminControlPanel instance;
 
-    ArrayList<User> users;
-    ArrayList<Group> groups;
+    private ArrayList<User> users;
+    private ArrayList<Group> groups;
 
-    ArrayList<String> uniqueUserIDs;
-    ArrayList<String> uniqueGroupIDs;
+    public ArrayList<String> uniqueUserIDs;
+    public ArrayList<String> uniqueGroupIDs;
     
     private String selectedUser;
 
     Group group = new Group();
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
-    DefaultTreeModel model = new DefaultTreeModel(root);
+    private DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
+    private DefaultTreeModel model = new DefaultTreeModel(root);
 
     /**
      * Creates new form AdminControlPanel
@@ -240,8 +240,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
                         selectedElement.add(userNode);
-
-                        //Still allowing to add users under users..
                     } else if (selectedElement.getUserObject() instanceof User) {
                         User user = new User(userIDTextArea.getText());
                         DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
@@ -297,6 +295,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_addGroupButtonActionPerformed
 
     private void openUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewButtonActionPerformed
+        for (int i = 0; i < uniqueUserIDs.size(); i++) {
+            System.out.println(uniqueUserIDs.get(i));
+        }
+        
         if (jTreeView.getSelectionPath() == null) {
             JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -344,6 +346,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotalButton;
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
+    
+    public ArrayList<String> getUniqueIDs() {
+        return uniqueUserIDs;
+    }
     
     private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {
         for (int i = startingIndex; i < rowCount; ++i) {

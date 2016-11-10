@@ -5,6 +5,8 @@
  */
 package main;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -19,12 +21,18 @@ public class UserView extends javax.swing.JFrame {
 
     private String user;
 
+    AdminControlPanel acp = new AdminControlPanel();
+    private ArrayList<String> userIDs;
+
     /**
      * Creates new form UserView
+     *
      * @param user
      */
     public UserView(String user) {
         this.user = user;
+        userIDs = acp.getUniqueIDs();
+        this.setTitle(user + "'s User View");
         initComponents();
     }
 
@@ -54,8 +62,6 @@ public class UserView extends javax.swing.JFrame {
         userViewIDTextArea.setLineWrap(true);
         userViewIDTextArea.setRows(5);
         jScrollPane1.setViewportView(userViewIDTextArea);
-        userViewIDTextArea.setEditable(false);
-        userViewIDTextArea.setText(user);
 
         followButton.setText("Follow User");
         followButton.addActionListener(new java.awt.event.ActionListener() {
@@ -78,6 +84,11 @@ public class UserView extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tweetTextArea);
 
         tweetButton.setText("Post Tweet");
+        tweetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tweetButtonActionPerformed(evt);
+            }
+        });
 
         newsFeedList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -127,10 +138,19 @@ public class UserView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void followButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followButtonActionPerformed
-        if (userViewIDTextArea.getText() == "") {
-
+        System.out.println("test");
+        for (int i = 0; i < userIDs.size(); i++) {
+            System.out.println("List: " + userIDs.get(i));
         }
+        if (!userIDs.contains(userViewIDTextArea.getText())) {
+            JOptionPane.showMessageDialog(null, "This user does not exist.", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        userViewIDTextArea.setText("");
     }//GEN-LAST:event_followButtonActionPerformed
+
+    private void tweetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tweetButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tweetButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

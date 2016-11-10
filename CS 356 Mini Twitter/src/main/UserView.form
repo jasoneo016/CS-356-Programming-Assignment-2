@@ -80,9 +80,6 @@
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="userViewIDTextArea.setEditable(false);&#xa;userViewIDTextArea.setText(user);"/>
-          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -140,6 +137,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Post Tweet"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tweetButtonActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane4">
       <AuxValues>
