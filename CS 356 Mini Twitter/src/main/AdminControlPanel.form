@@ -109,7 +109,7 @@
       <SubComponents>
         <Component class="javax.swing.JTree" name="jTreeView">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTreeView.setModel(model);&#xa;jTreeView.addTreeSelectionListener(new TreeSelectionListener() {&#xa;      public void valueChanged(TreeSelectionEvent e) {&#xa;        DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();&#xa;        System.out.println(&quot;You selected &quot; + node);&#xa;      }&#xa;    });"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTreeView.setModel(model);"/>
           </AuxValues>
         </Component>
       </SubComponents>

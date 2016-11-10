@@ -6,14 +6,12 @@
 package main;
 
 import java.util.List;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
  * @author admin
  */
-public class TreeItem extends DefaultMutableTreeNode {
+public class TreeItem  {
     
     private String uniqueID;
     private List<TreeItem> treeItems;

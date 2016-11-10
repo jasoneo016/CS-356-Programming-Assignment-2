@@ -74,12 +74,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTreeView.setModel(model);
-        jTreeView.addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-                System.out.println("You selected " + node);
-            }
-        });
         jScrollPane1.setViewportView(jTreeView);
 
         groupIDTextArea.setColumns(20);
@@ -212,7 +206,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
             if (!uniqueIDs.contains(userIDTextArea.getText())) {
                 User user = new User(userIDTextArea.getText());
                 uniqueIDs.add(userIDTextArea.getText());
-                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText());
+                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(userIDTextArea.getText(), false);
                 root.add(userNode);
             } else {
                 JOptionPane.showMessageDialog(null, "This user already exists.");
@@ -227,10 +221,32 @@ public class AdminControlPanel extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please type a group to add.");
         } else {
             if (!uniqueGroupIDs.contains(groupIDTextArea.getText())) {
-                Group groups = new Group(groupIDTextArea.getText());
-                uniqueGroupIDs.add(groupIDTextArea.getText());
-                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
-                root.add(groupNode);
+                                
+                if (jTreeView.getSelectionPath() == null) {
+                    group = new Group(groupIDTextArea.getText());
+                    uniqueGroupIDs.add(groupIDTextArea.getText());
+                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
+                    root.add(groupNode);
+                } else {
+                    jTreeView.addTreeSelectionListener(new TreeSelectionListener() {
+                        public void valueChanged(TreeSelectionEvent e) {
+                            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                            if (node.getAllowsChildren() == true) {
+                                if (node.getParent() == root || node == root) {
+                                    group = new Group(groupIDTextArea.getText());
+                                    uniqueGroupIDs.add(groupIDTextArea.getText());
+                                    System.out.println("added: " + groupIDTextArea.getText());
+                                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
+                                    node.add(groupNode);
+                                }
+                            }
+                        }
+                    });
+                }
+//                Group groups = new Group(groupIDTextArea.getText());
+//                uniqueGroupIDs.add(groupIDTextArea.getText());
+//                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(groupIDTextArea.getText());
+//                root.add(groupNode);
             } else {
                 JOptionPane.showMessageDialog(null, "This group already exists.");
             }
@@ -262,6 +278,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_showPositivePercentageButtonActionPerformed
 
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGroupButton;
@@ -278,6 +295,5 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotalButton;
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
-
 
 }
