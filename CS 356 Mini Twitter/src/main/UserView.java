@@ -21,8 +21,6 @@ public class UserView extends javax.swing.JFrame {
 
     private String username;
     private User user;
-
-    AdminControlPanel acp = new AdminControlPanel();
     private ArrayList<String> userIDs;
 
     /**
@@ -30,10 +28,10 @@ public class UserView extends javax.swing.JFrame {
      *
      * @param user
      */
-    public UserView(String username, User user) {
-        this.username = username;
+    public UserView(User user, ArrayList<String> userIDs) {
         this.user = user;
-        userIDs = acp.getUniqueIDs();
+        this.username = user.getID();
+        this.userIDs = userIDs;
         this.setTitle(username + "'s User View");
         initComponents();
     }
@@ -140,18 +138,13 @@ public class UserView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void followButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followButtonActionPerformed
-        System.out.println("test");
-        for (int i = 0; i < userIDs.size(); i++) {
-            System.out.println("List: " + userIDs.get(i));
-        }
         if (!userIDs.contains(userViewIDTextArea.getText())) {
             JOptionPane.showMessageDialog(null, "This user does not exist.", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
+            user.follow(userViewIDTextArea.getText());
             user.attach(user);
             user.notifyObservers();
         }
-        
-        
         userViewIDTextArea.setText("");
     }//GEN-LAST:event_followButtonActionPerformed
 

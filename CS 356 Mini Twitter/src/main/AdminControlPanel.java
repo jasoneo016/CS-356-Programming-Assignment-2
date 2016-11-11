@@ -295,10 +295,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_addGroupButtonActionPerformed
 
     private void openUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewButtonActionPerformed
-        for (int i = 0; i < uniqueUserIDs.size(); i++) {
-            System.out.println(uniqueUserIDs.get(i));
-        }
-        
         if (jTreeView.getSelectionPath() == null) {
             JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -308,7 +304,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
             } else if (selectedElement.getUserObject() instanceof User) {
                 selectedUser = selectedElement.getUserObject().toString();
                 User user = new User(selectedUser);
-                UserView userView = new UserView(selectedUser, user);
+                UserView userView = new UserView(user, uniqueUserIDs);
                 userView.setVisible(true);
                 userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
