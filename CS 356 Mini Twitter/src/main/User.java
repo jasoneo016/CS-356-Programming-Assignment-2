@@ -35,6 +35,7 @@ public class User implements TreeItem, Subject, Observer {
          followers = new ArrayList();
          following = new ArrayList();
          messages  = new ArrayList();
+         newsFeed = new ArrayList();
          totalUsers++;
      }
 
@@ -44,6 +45,7 @@ public class User implements TreeItem, Subject, Observer {
          followers = new ArrayList();
          following = new ArrayList();
          messages  = new ArrayList();
+         newsFeed = new ArrayList();
          totalUsers++;
      }
      
@@ -62,6 +64,10 @@ public class User implements TreeItem, Subject, Observer {
     
     public List<String> getMessages() {
         return messages;
+    }
+    
+    public List<String> getFollowing() {
+        return following;
     }
      
     public int getTotalUsers() {

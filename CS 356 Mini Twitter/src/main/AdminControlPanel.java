@@ -27,8 +27,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
     protected static AdminControlPanel instance;
 
-    private ArrayList<User> users;
-    private ArrayList<Group> groups;
+    private ArrayList<TreeItem> users;
+    private ArrayList<TreeItem> groups;
 
     public ArrayList<String> uniqueUserIDs;
     public ArrayList<String> uniqueGroupIDs;
