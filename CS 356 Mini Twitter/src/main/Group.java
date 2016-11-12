@@ -62,7 +62,7 @@ public class Group implements TreeItem {
     }
 
     @Override
-    public void attach(Observer observer) {
+    public void attach(User observer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

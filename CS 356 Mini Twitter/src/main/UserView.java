@@ -23,7 +23,7 @@ public class UserView extends javax.swing.JFrame {
 
     private String username;
     private User user;
-    ArrayList<TreeItem> users;
+    ArrayList<User> users;
     private ArrayList<String> userIDs;
     DefaultListModel<String> followingModel;
     DefaultListModel<String> newsfeedModel;
@@ -33,7 +33,7 @@ public class UserView extends javax.swing.JFrame {
      *
      * @param user
      */
-    public UserView(User user, ArrayList<String> userIDs, ArrayList<TreeItem> users) {
+    public UserView(User user, ArrayList<String> userIDs, ArrayList<User> users) {
         this.user = user;
         this.username = user.getID();
         this.userIDs = userIDs;
@@ -149,9 +149,10 @@ public class UserView extends javax.swing.JFrame {
                 followingModel.addElement("- " + userViewIDTextArea.getText());
                 followingList.setModel(followingModel);
                 user.follow(userViewIDTextArea.getText());
-                for (TreeItem newFollow : users) {
-                    if (newFollow.getID().equals(userViewIDTextArea.getText())) {
-                        newFollow.attach(user);
+
+                for (int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getID().equals(userViewIDTextArea.getText())) {
+                        users.get(i).attach(user);
                     }
                 }
             }
@@ -165,10 +166,20 @@ public class UserView extends javax.swing.JFrame {
         if (tweetTextArea.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Tweets cannot be blank!", "Tweet Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            //added name + tweet to beginning of newsfeed
-            user.tweet(tweetTextArea.getText());
-            user.notifyObservers(tweetTextArea.getText());
-            newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
+//            user.tweet(tweetTextArea.getText());
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getID().equals(user.getID())) {
+                    users.get(i).tweet(tweetTextArea.getText());
+                    users.get(i).notifyObservers(tweetTextArea.getText());
+                    newsfeedModel.insertElementAt(users.get(i).getNewsFeed().get(0), 1);
+                    for (int j = 0; j < users.get(i).getNewsFeed().size(); j++) {
+                        System.out.println(users.get(i) + "'s news feed: " + users.get(i).getNewsFeed().get(j));
+                    }
+                }
+            }
+
+//            user.notifyObservers(tweetTextArea.getText());
+//            newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
             newsFeedList.setModel(newsfeedModel);
             tweetTextArea.setText("");
             revalidate();

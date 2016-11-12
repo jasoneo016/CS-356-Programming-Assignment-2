@@ -11,5 +11,5 @@ package main;
  */
 public interface Observer {
     
-    public void update(Subject subject, String newUpdate);
+    public void update(User user, String newUpdate);
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface Subject {
 	
-	public void attach(Observer observer);
+	public void attach(User follower);
        
 	
 	public void detach(Observer observer);
