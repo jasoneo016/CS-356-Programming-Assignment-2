@@ -5,15 +5,13 @@
  */
 package main;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  *
  * @author admin
  */
-public class User implements TreeItem, Observer  {
+public class User extends Observable implements Observer, TreeItem {
 
     private String uniqueID;
     private List<String> following;
@@ -47,13 +45,19 @@ public class User implements TreeItem, Observer  {
         totalUsers++;
     }
 
-    public void follow(String uniqueID) {
+    public void follow(String user) {
         following.add(uniqueID);
+        User findUser = Admin.getInstance().getUser(user);
+        findUser.addObserver(this);
     }
 
     public void tweet(String message) {
         messages.add(message);
+        setChanged();
+        notifyObservers(message);
         newsFeed.add(0, "- " + uniqueID + ": " + message);
+        setChanged();
+        notifyObservers(newsFeed);
         for (String word : positiveWords) {
             if (message.toLowerCase().contains(word)) {
                 positiveCount++;
@@ -61,7 +65,7 @@ public class User implements TreeItem, Observer  {
         }
         messageCount++;
     }
-    
+
     public List<User> getObserver() {
         return followers;
     }
@@ -82,17 +86,14 @@ public class User implements TreeItem, Observer  {
         return positiveCount;
     }
 
-    @Override
     public void attach(User user) {
         followers.add(user);
     }
 
-    @Override
     public void detach(Observer observer) {
         followers.remove(observer);
     }
 
-    @Override
     public void notifyObservers(String newUpdate) {
         for (Observer ob : followers) {
             ob.update(this, newUpdate);
@@ -103,7 +104,6 @@ public class User implements TreeItem, Observer  {
         return newsFeed;
     }
 
-    @Override
     public void update(User user1, String newUpdate) {
         newsFeed.add(0, "- " + user1.getID() + ": " + newUpdate);
     }
@@ -121,5 +121,12 @@ public class User implements TreeItem, Observer  {
     @Override
     public String toString() {
         return uniqueID;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof String) {
+            newsFeed.add("[" + ((User) o).getID() + "] - " + (String) arg);
+        }
     }
 }

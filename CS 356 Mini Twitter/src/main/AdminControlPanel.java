@@ -34,8 +34,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
     public ArrayList<String> uniqueGroupIDs;
     
     private String selectedUser;
+    public User userViewUser;
 
     Group group = new Group();
+    Admin admin = new Admin();
     private DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
     private DefaultTreeModel model = new DefaultTreeModel(root);
 
@@ -303,8 +305,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
             } else if (selectedElement.getUserObject() instanceof User) {
                 selectedUser = selectedElement.getUserObject().toString();
-                User user = new User(selectedUser);
-                UserView userView = new UserView(user, uniqueUserIDs, users);
+//                User user = new User(selectedUser);
+                UserView userView = new UserView(admin.getInstance().getUser(selectedUser), uniqueUserIDs, users);
                 userView.setVisible(true);
                 userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }

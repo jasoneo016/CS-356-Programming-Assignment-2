@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author admin
  */
-public interface TreeItem extends Subject { 
+public interface TreeItem { 
         
     public String getID();
     

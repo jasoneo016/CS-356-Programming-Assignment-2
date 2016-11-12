@@ -6,10 +6,13 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import java.util.Observer;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -19,11 +22,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author admin
  */
-public class UserView extends javax.swing.JFrame {
+public class UserView extends javax.swing.JFrame implements Observer {
 
     private String username;
     private User user;
     ArrayList<User> users;
+    ArrayList<Observer> observers;
     private ArrayList<String> userIDs;
     DefaultListModel<String> followingModel;
     DefaultListModel<String> newsfeedModel;
@@ -35,10 +39,12 @@ public class UserView extends javax.swing.JFrame {
      */
     public UserView(User user, ArrayList<String> userIDs, ArrayList<User> users) {
         this.user = user;
+        user.addObserver(this);
         this.username = user.getID();
         this.userIDs = userIDs;
         this.users = users;
         this.setTitle(username + "'s User View");
+        observers = new ArrayList();
         followingModel = new DefaultListModel<String>();
         newsfeedModel = new DefaultListModel<String>();
         initComponents();
@@ -165,26 +171,28 @@ public class UserView extends javax.swing.JFrame {
     private void tweetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tweetButtonActionPerformed
         if (tweetTextArea.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Tweets cannot be blank!", "Tweet Error", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        } else { 
+            user.tweet(tweetTextArea.getText());
+            
 //            user.tweet(tweetTextArea.getText());
-            for (int i = 0; i < users.size(); i++) {
-                if (users.get(i).getID().equals(user.getID())) {
-                    users.get(i).tweet(tweetTextArea.getText());
-                    users.get(i).notifyObservers(tweetTextArea.getText());
-                    newsfeedModel.insertElementAt(users.get(i).getNewsFeed().get(0), 1);
-                    for (int j = 0; j < users.get(i).getNewsFeed().size(); j++) {
-                        System.out.println(users.get(i) + "'s news feed: " + users.get(i).getNewsFeed().get(j));
-                    }
-                }
-            }
+//                for (int i = 0; i < users.size(); i++) {
+//                    if (users.get(i).getID().equals(user.getID())) {
+//                        users.get(i).tweet(tweetTextArea.getText());
+//                        users.get(i).notifyObservers(tweetTextArea.getText());
+//                        newsfeedModel.insertElementAt(users.get(i).getNewsFeed().get(0), 1);
+//                        for (int j = 0; j < users.get(i).getNewsFeed().size(); j++) {
+//                            System.out.println(users.get(i) + "'s news feed: " + users.get(i).getNewsFeed().get(j));
+//                        }
+//                    }
+//                }
 
 //            user.notifyObservers(tweetTextArea.getText());
-//            newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
-            newsFeedList.setModel(newsfeedModel);
-            tweetTextArea.setText("");
-            revalidate();
-            repaint();
-        }
+            newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
+                newsFeedList.setModel(newsfeedModel);
+                tweetTextArea.setText("");
+                revalidate();
+                repaint();
+            }
     }//GEN-LAST:event_tweetButtonActionPerformed
 
 
@@ -200,4 +208,13 @@ public class UserView extends javax.swing.JFrame {
     private javax.swing.JTextArea tweetTextArea;
     private javax.swing.JTextArea userViewIDTextArea;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof List) {
+            newsFeedList.setListData((String[]) user.getNewsFeed().toArray());
+            followingList.setListData((String[]) user.getFollowing().toArray());
+        }
+    }
+
 }
