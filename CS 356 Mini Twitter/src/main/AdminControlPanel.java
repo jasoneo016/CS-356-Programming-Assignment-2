@@ -304,7 +304,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
             } else if (selectedElement.getUserObject() instanceof User) {
                 selectedUser = selectedElement.getUserObject().toString();
                 User user = new User(selectedUser);
-                UserView userView = new UserView(user, uniqueUserIDs);
+                UserView userView = new UserView(user, uniqueUserIDs, users);
                 userView.setVisible(true);
                 userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
@@ -324,7 +324,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_showMessagesTotalButtonActionPerformed
 
     private void showPositivePercentageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPositivePercentageButtonActionPerformed
-        // TODO add your handling code here:
+        //for (user : users) {
+        //count positveCount
     }//GEN-LAST:event_showPositivePercentageButtonActionPerformed
 
 

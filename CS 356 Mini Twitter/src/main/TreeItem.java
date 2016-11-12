@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author admin
  */
-public interface TreeItem  { 
+public interface TreeItem extends Subject { 
         
     public String getID();
     
@@ -19,4 +19,5 @@ public interface TreeItem  {
     
     @Override
     public String toString();
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author admin
  */
-public class User implements TreeItem, Subject, Observer {
+public class User implements TreeItem, Observer {
     
      private String uniqueID;
      private List<String> followers;
@@ -27,6 +27,7 @@ public class User implements TreeItem, Subject, Observer {
 
      private int totalUsers = 0;
      private int positiveCount = 0;
+     private int messageCount = 0;
      private String[] positiveWords = {"good", "great", "excellent", "dope", "fam", 
                                       "brackin", "dench", "chill", "hella", "lit"};
      
@@ -55,11 +56,13 @@ public class User implements TreeItem, Subject, Observer {
     
     public void tweet(String message) {
         messages.add(message);
+        newsFeed.add(0, "- " + uniqueID + ": " + message);
         for (String word: positiveWords) {
             if (message.toLowerCase().contains(word)) {
                    positiveCount++;
                }
         }
+        messageCount++;
     }
     
     public List<String> getMessages() {
@@ -89,9 +92,9 @@ public class User implements TreeItem, Subject, Observer {
     }
 
     @Override
-    public void notifyObservers() {
+    public void notifyObservers(String newUpdate) {
         for(Observer ob : observers) {
-            ob.update(this);
+            ob.update(this, newUpdate);
 	}
     }
     
@@ -100,11 +103,9 @@ public class User implements TreeItem, Subject, Observer {
     }
 
     @Override
-    public void update(Subject subject) {
+    public void update(Subject subject, String newUpdate) {
         if (subject instanceof User) {
-//            subject.following
-//            subject.followers
-//            subject.newsfeed
+            newsFeed.add(0, "- " + ((User) subject).getID() + ": " + newUpdate);
         }
     }
 

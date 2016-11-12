@@ -23,6 +23,7 @@ public class UserView extends javax.swing.JFrame {
 
     private String username;
     private User user;
+    ArrayList<TreeItem> users;
     private ArrayList<String> userIDs;
     DefaultListModel<String> followingModel;
     DefaultListModel<String> newsfeedModel;
@@ -32,10 +33,11 @@ public class UserView extends javax.swing.JFrame {
      *
      * @param user
      */
-    public UserView(User user, ArrayList<String> userIDs) {
+    public UserView(User user, ArrayList<String> userIDs, ArrayList<TreeItem> users) {
         this.user = user;
         this.username = user.getID();
         this.userIDs = userIDs;
+        this.users = users;
         this.setTitle(username + "'s User View");
         followingModel = new DefaultListModel<String>();
         newsfeedModel = new DefaultListModel<String>();
@@ -136,9 +138,6 @@ public class UserView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void followButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followButtonActionPerformed
-        System.out.println(user.getID());
-        System.out.println(userViewIDTextArea.getText());
-
         if (!userIDs.contains(userViewIDTextArea.getText())) {
             JOptionPane.showMessageDialog(null, "This user does not exist.", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
         } else if (user.getFollowing().contains(userViewIDTextArea.getText())) {
@@ -150,27 +149,30 @@ public class UserView extends javax.swing.JFrame {
                 followingModel.addElement("- " + userViewIDTextArea.getText());
                 followingList.setModel(followingModel);
                 user.follow(userViewIDTextArea.getText());
-                user.attach(user);
-                user.notifyObservers();
+                for (TreeItem newFollow : users) {
+                    if (newFollow.getID().equals(userViewIDTextArea.getText())) {
+                        newFollow.attach(user);
+                    }
+                }
             }
         }
         userViewIDTextArea.setText("");
+        revalidate();
+        repaint();
     }//GEN-LAST:event_followButtonActionPerformed
 
     private void tweetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tweetButtonActionPerformed
         if (tweetTextArea.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Tweets cannot be blank!", "Tweet Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
+            //added name + tweet to beginning of newsfeed
             user.tweet(tweetTextArea.getText());
-            user.getNewsFeed().add(0, tweetTextArea.getText());
-            for (int i = 0; i < user.getNewsFeed().size(); i++) {
-                System.out.println(user.getNewsFeed().get(i));
-            }
-            newsfeedModel.insertElementAt("- " + user.getNewsFeed().get(0), 1);
-//            newsfeedModel.addElement("- " + user.getNewsFeed().get(0));
+            user.notifyObservers(tweetTextArea.getText());
+            newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
             newsFeedList.setModel(newsfeedModel);
-            user.notifyObservers();
             tweetTextArea.setText("");
+            revalidate();
+            repaint();
         }
     }//GEN-LAST:event_tweetButtonActionPerformed
 
