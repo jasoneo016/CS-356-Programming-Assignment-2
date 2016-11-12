@@ -7,6 +7,7 @@ package main;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -28,16 +29,13 @@ public class AdminControlPanel extends javax.swing.JFrame {
     protected static AdminControlPanel instance;
 
     private ArrayList<User> users;
+    private HashMap<String, UserView> userViews = new HashMap<String, UserView>();
     private ArrayList<Group> groups;
-
     public ArrayList<String> uniqueUserIDs;
     public ArrayList<String> uniqueGroupIDs;
-    
     private String selectedUser;
-    public User userViewUser;
-
     Group group = new Group();
-    Admin admin = new Admin();
+    StatisticButtonVisitor sbv = new StatisticButtonVisitor();
     private DefaultMutableTreeNode root = new DefaultMutableTreeNode(group.getRoot());
     private DefaultTreeModel model = new DefaultTreeModel(root);
 
@@ -227,6 +225,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                     users.add(user);
                     uniqueUserIDs.add(userIDTextArea.getText());
+                    userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
                     root.add(userNode);
                 } else {
                     DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
@@ -235,12 +234,14 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
+                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
                         root.add(userNode);
                     } else if (selectedElement.getUserObject() instanceof Group) {
                         User user = new User(userIDTextArea.getText());
                         DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
+                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
                         selectedElement.add(userNode);
                     } else if (selectedElement.getUserObject() instanceof User) {
                         User user = new User(userIDTextArea.getText());
@@ -248,6 +249,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) selectedElement.getParent();
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
+                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
                         parentNode.add(userNode);
                     }
                 }
@@ -305,8 +307,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Please select a user to view.", "User View Error", JOptionPane.INFORMATION_MESSAGE);
             } else if (selectedElement.getUserObject() instanceof User) {
                 selectedUser = selectedElement.getUserObject().toString();
-//                User user = new User(selectedUser);
-                UserView userView = new UserView(admin.getInstance().getUser(selectedUser), uniqueUserIDs, users);
+                User user = new User(selectedUser);
+                UserView userView = userViews.get(selectedUser);
                 userView.setVisible(true);
                 userView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
@@ -314,20 +316,23 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_openUserViewButtonActionPerformed
 
     private void showUserTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalButtonActionPerformed
-        JOptionPane.showMessageDialog(null, "Show User Total", "Show User Error", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "There are a total of " + users.size() + " user(s).", "Show User Total", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_showUserTotalButtonActionPerformed
 
     private void showGroupTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupTotalButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_showGroupTotalButtonActionPerformed
+        int numGroups = groups.size() - 1;
+        JOptionPane.showMessageDialog(null, "There are a total of " + numGroups + " group(s).", "Show Group Total", JOptionPane.INFORMATION_MESSAGE);    }//GEN-LAST:event_showGroupTotalButtonActionPerformed
 
     private void showMessagesTotalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showMessagesTotalButtonActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "There are a total of " + (int)getTotalMessageCount() + " message(s).", "Show Message Total", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_showMessagesTotalButtonActionPerformed
 
     private void showPositivePercentageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPositivePercentageButtonActionPerformed
-        //for (user : users) {
-        //count positveCount
+        if (getTotalMessageCount() == 0) {
+            JOptionPane.showMessageDialog(null, "There are no messages to calculate the percentage.", "Show Positive Percentage Error", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Approximately " + getPositivePercentage() + "% of message(s) are positive.", "Show Positive Percentage", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_showPositivePercentageButtonActionPerformed
 
 
@@ -346,11 +351,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotalButton;
     private javax.swing.JTextArea userIDTextArea;
     // End of variables declaration//GEN-END:variables
-    
+
     public ArrayList<String> getUniqueIDs() {
         return uniqueUserIDs;
     }
-    
+
     private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {
         for (int i = startingIndex; i < rowCount; ++i) {
             tree.expandRow(i);
@@ -358,7 +363,24 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
         if (tree.getRowCount() != rowCount) {
             expandAllNodes(tree, rowCount, tree.getRowCount());
+
         }
+    }
+
+    public double getTotalMessageCount() {
+        double totalMessageCount = 0.0;
+        for (User u : users) {
+            totalMessageCount += u.getMessageCount();
+        }
+        return totalMessageCount;
+    }
+
+    public double getPositivePercentage() {
+        double positiveCount = 0.0;
+        for (User u : users) {
+            positiveCount += u.getPositiveCount();
+        }
+        return ((positiveCount / getTotalMessageCount()) * 100.0);
     }
 
     private static class MyTreeCellRenderer extends DefaultTreeCellRenderer {
@@ -366,15 +388,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-            // decide what icons you want by examining the node
             if (value instanceof DefaultMutableTreeNode) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
                 if (node.getUserObject().toString() == "Root") {
-                    // your root node, since you just put a String as a user obj                    
                     setIcon(UIManager.getIcon("FileView.computerIcon"));
                 } else if (node.getUserObject() instanceof Group) {
-                    // decide based on some property of your Contact obj
                     Group groupObject = (Group) node.getUserObject();
                     if (groupObject.isSomeProperty()) {
                         setIcon(UIManager.getIcon("FileChooser.homeFolderIcon"));
@@ -383,7 +401,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     }
                 }
             }
-
             return this;
         }
 

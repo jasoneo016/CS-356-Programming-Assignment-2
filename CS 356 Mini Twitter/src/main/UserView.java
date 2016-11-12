@@ -26,8 +26,7 @@ public class UserView extends javax.swing.JFrame implements Observer {
 
     private String username;
     private User user;
-    ArrayList<User> users;
-    ArrayList<Observer> observers;
+    private ArrayList<User> users;
     private ArrayList<String> userIDs;
     DefaultListModel<String> followingModel;
     DefaultListModel<String> newsfeedModel;
@@ -44,7 +43,6 @@ public class UserView extends javax.swing.JFrame implements Observer {
         this.userIDs = userIDs;
         this.users = users;
         this.setTitle(username + "'s User View");
-        observers = new ArrayList();
         followingModel = new DefaultListModel<String>();
         newsfeedModel = new DefaultListModel<String>();
         initComponents();
@@ -146,20 +144,19 @@ public class UserView extends javax.swing.JFrame implements Observer {
     private void followButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followButtonActionPerformed
         if (!userIDs.contains(userViewIDTextArea.getText())) {
             JOptionPane.showMessageDialog(null, "This user does not exist.", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
+            userViewIDTextArea.setText("");
+            return;
         } else if (user.getFollowing().contains(userViewIDTextArea.getText())) {
             JOptionPane.showMessageDialog(null, "You are already following this user.", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
+        } else if (user.getID().equals(userViewIDTextArea.getText())) {
+            JOptionPane.showMessageDialog(null, "You cannot follow yourself!", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            if (user.getID().equals(userViewIDTextArea.getText())) {
-                JOptionPane.showMessageDialog(null, "You cannot follow yourself!", "Follow Error", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                followingModel.addElement("- " + userViewIDTextArea.getText());
-                followingList.setModel(followingModel);
-                user.follow(userViewIDTextArea.getText());
-
-                for (int i = 0; i < users.size(); i++) {
-                    if (users.get(i).getID().equals(userViewIDTextArea.getText())) {
-                        users.get(i).attach(user);
-                    }
+            followingModel.addElement("- " + userViewIDTextArea.getText());
+            followingList.setModel(followingModel);
+            user.follow(userViewIDTextArea.getText());
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getID().equals(userViewIDTextArea.getText())) {
+                    users.get(i).attach(user);
                 }
             }
         }
@@ -171,31 +168,14 @@ public class UserView extends javax.swing.JFrame implements Observer {
     private void tweetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tweetButtonActionPerformed
         if (tweetTextArea.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Tweets cannot be blank!", "Tweet Error", JOptionPane.INFORMATION_MESSAGE);
-        } else { 
+        } else {
             user.tweet(tweetTextArea.getText());
-            
-//            user.tweet(tweetTextArea.getText());
-//                for (int i = 0; i < users.size(); i++) {
-//                    if (users.get(i).getID().equals(user.getID())) {
-//                        users.get(i).tweet(tweetTextArea.getText());
-//                        users.get(i).notifyObservers(tweetTextArea.getText());
-//                        newsfeedModel.insertElementAt(users.get(i).getNewsFeed().get(0), 1);
-//                        for (int j = 0; j < users.get(i).getNewsFeed().size(); j++) {
-//                            System.out.println(users.get(i) + "'s news feed: " + users.get(i).getNewsFeed().get(j));
-//                        }
-//                    }
-//                }
-
-//            user.notifyObservers(tweetTextArea.getText());
-            for (int i = 0; i < user.getNewsFeed().size(); i++) {
-                System.out.println(user.getNewsFeed().get(i));
-            }
             newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
-                newsFeedList.setModel(newsfeedModel);
-                tweetTextArea.setText("");
-                revalidate();
-                repaint();
-            }
+            newsFeedList.setModel(newsfeedModel);
+            tweetTextArea.setText("");
+            revalidate();
+            repaint();
+        }
     }//GEN-LAST:event_tweetButtonActionPerformed
 
 
@@ -215,8 +195,6 @@ public class UserView extends javax.swing.JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof List) {
-//            newsFeedList.setListData((String[]) user.getNewsFeed().toArray());
-//            followingList.setListData((String[]) user.getFollowing().toArray());
         }
     }
 

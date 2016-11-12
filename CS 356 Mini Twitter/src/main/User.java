@@ -46,9 +46,7 @@ public class User extends Observable implements Observer, TreeItem {
     }
 
     public void follow(String user) {
-        following.add(uniqueID);
-        User findUser = Admin.getInstance().getUser(user);
-        findUser.addObserver(this);
+        following.add(user);
     }
 
     public void tweet(String message) {
@@ -66,6 +64,10 @@ public class User extends Observable implements Observer, TreeItem {
         messageCount++;
     }
 
+    public int getMessageCount() {
+        return messageCount;
+    }
+    
     public List<User> getObserver() {
         return followers;
     }
@@ -77,7 +79,7 @@ public class User extends Observable implements Observer, TreeItem {
     public List<String> getFollowing() {
         return following;
     }
-
+    
     public int getTotalUsers() {
         return totalUsers;
     }
@@ -90,22 +92,8 @@ public class User extends Observable implements Observer, TreeItem {
         followers.add(user);
     }
 
-    public void detach(Observer observer) {
-        followers.remove(observer);
-    }
-
-    public void notifyObservers(String newUpdate) {
-        for (Observer ob : followers) {
-            ob.update(this, newUpdate);
-        }
-    }
-
     public List<String> getNewsFeed() {
         return newsFeed;
-    }
-
-    public void update(User user1, String newUpdate) {
-        newsFeed.add(0, "- " + user1.getID() + ": " + newUpdate);
     }
 
     @Override
