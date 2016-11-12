@@ -187,6 +187,9 @@ public class UserView extends javax.swing.JFrame implements Observer {
 //                }
 
 //            user.notifyObservers(tweetTextArea.getText());
+            for (int i = 0; i < user.getNewsFeed().size(); i++) {
+                System.out.println(user.getNewsFeed().get(i));
+            }
             newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
                 newsFeedList.setModel(newsfeedModel);
                 tweetTextArea.setText("");
@@ -212,8 +215,8 @@ public class UserView extends javax.swing.JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof List) {
-            newsFeedList.setListData((String[]) user.getNewsFeed().toArray());
-            followingList.setListData((String[]) user.getFollowing().toArray());
+//            newsFeedList.setListData((String[]) user.getNewsFeed().toArray());
+//            followingList.setListData((String[]) user.getFollowing().toArray());
         }
     }
 
