@@ -225,7 +225,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                     users.add(user);
                     uniqueUserIDs.add(userIDTextArea.getText());
-                    userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
+                    userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users, userViews));
                     root.add(userNode);
                 } else {
                     DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode) jTreeView.getSelectionPath().getLastPathComponent();
@@ -234,14 +234,14 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
-                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
+                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users, userViews));
                         root.add(userNode);
                     } else if (selectedElement.getUserObject() instanceof Group) {
                         User user = new User(userIDTextArea.getText());
                         DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user, false);
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
-                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
+                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users, userViews));
                         selectedElement.add(userNode);
                     } else if (selectedElement.getUserObject() instanceof User) {
                         User user = new User(userIDTextArea.getText());
@@ -249,7 +249,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) selectedElement.getParent();
                         users.add(user);
                         uniqueUserIDs.add(userIDTextArea.getText());
-                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users));
+                        userViews.put(user.getID(), new UserView(user, uniqueUserIDs, users, userViews));
                         parentNode.add(userNode);
                     }
                 }

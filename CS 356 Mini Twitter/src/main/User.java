@@ -117,4 +117,8 @@ public class User extends Observable implements Observer, TreeItem {
             newsFeed.add("[" + ((User) o).getID() + "] - " + (String) arg);
         }
     }
+    
+    public void  updateNewsFeed(String msg) {
+		newsFeed.add(msg);
+	}
 }

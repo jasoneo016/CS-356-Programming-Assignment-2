@@ -6,6 +6,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import javax.swing.DefaultListModel;
@@ -27,6 +28,7 @@ public class UserView extends javax.swing.JFrame implements Observer {
     private String username;
     private User user;
     private ArrayList<User> users;
+    private HashMap<String, UserView> userViews;
     private ArrayList<String> userIDs;
     DefaultListModel<String> followingModel;
     DefaultListModel<String> newsfeedModel;
@@ -36,12 +38,13 @@ public class UserView extends javax.swing.JFrame implements Observer {
      *
      * @param user
      */
-    public UserView(User user, ArrayList<String> userIDs, ArrayList<User> users) {
+    public UserView(User user, ArrayList<String> userIDs, ArrayList<User> users, HashMap<String, UserView> userViews) {
         this.user = user;
         user.addObserver(this);
         this.username = user.getID();
         this.userIDs = userIDs;
         this.users = users;
+        this.userViews = userViews;
         this.setTitle(username + "'s User View");
         followingModel = new DefaultListModel<String>();
         newsfeedModel = new DefaultListModel<String>();
@@ -173,6 +176,24 @@ public class UserView extends javax.swing.JFrame implements Observer {
             newsfeedModel.insertElementAt(user.getNewsFeed().get(0), 1);
             newsFeedList.setModel(newsfeedModel);
             tweetTextArea.setText("");
+
+            // code below to update to all follower users of this user, so they update newFeed
+            List<User> ifollowers = user.getObserver();
+            int isize = ifollowers.size();
+            String msg = user.getNewsFeed().get(0);
+            for (int j = 0; j < isize; j++) {
+                User myuser = ifollowers.get(j);
+                UserView myUserView = userViews.get(myuser.getID());
+                myuser.updateNewsFeed(msg);
+                update(myuser, msg);
+
+                myUserView.newsfeedModel.insertElementAt(msg, 1);
+                myUserView.newsFeedList.setModel(newsfeedModel);
+                myUserView.tweetTextArea.setText("");
+                myUserView.revalidate();
+                myUserView.repaint();
+
+            }
             revalidate();
             repaint();
         }
